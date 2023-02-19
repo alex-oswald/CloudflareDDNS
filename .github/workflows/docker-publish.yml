@@ -64,4 +64,4 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           file: ./CloudflareDDNS/Dockerfile
-          platforms: linux/arm64
+          platforms: linux/amd64,linux/arm64
