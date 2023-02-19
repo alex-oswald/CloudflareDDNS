@@ -2,7 +2,9 @@ name: Create Docker image and publish to GitHub Packages
 
 on:
   push:
-    branches: [ "main", "dev" ]
+    branches:
+      - 'main'
+      - 'dev'
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
   pull_request:
@@ -10,7 +12,6 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
