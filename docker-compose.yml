@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  cloudflareddns:
+    build: ./CloudflareDDNS
+
+    environment:
+      CloudflareApi__ApiToken: api_token
+      DDNS__UpdateIntervalSeconds: 10
+      DDNS__ZoneName: example.com
+      DDNS__DnsRecordName: vpn.example.com
