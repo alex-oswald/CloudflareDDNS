@@ -1,11 +1,10 @@
-﻿using Serilog.Events;
-using Serilog;
-using Microsoft.AspNetCore.Builder;
-using CloudflareDDNS;
-using Microsoft.Extensions.DependencyInjection;
-using DnsClient;
+﻿using CloudflareDDNS;
 using CloudflareDDNS.Api;
-using Microsoft.Extensions.Options;
+using DnsClient;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using Serilog.Events;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
@@ -22,15 +21,11 @@ try
     var builder = WebApplication.CreateBuilder(args);
 
     builder.Host.UseSerilog();
+    builder.Services.AddHttpClient();
     builder.Services.AddHostedService<DDNSBackgroundService>();
     builder.Services.AddTransient<ILookupClient, LookupClient>();
     builder.Services.AddTransient<IPublicIPResolver, PublicIPResolver>();
-    builder.Services.AddTransient<ICloudflareApi, CloudflareApi>(sp =>
-    {
-        var logger = sp.GetRequiredService<ILogger<CloudflareApi>>();
-        var options = sp.GetRequiredService<IOptions<CloudflareApiOptions>>();
-        return new CloudflareApi(logger, options, new HttpClient());
-    });
+    builder.Services.AddTransient<ICloudflareApi, CloudflareApi>();
     builder.Services.AddOptions<DDNSOptions>()
         .Bind(builder.Configuration.GetSection(DDNSOptions.Section))
         .ValidateDataAnnotations();
